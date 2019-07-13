@@ -97,73 +97,70 @@ $('#add-animal').on('click', function () {
     animalButtons.push(queryAnimal);
     renderButtons();
 
+
+
+
 });
 
 renderButtons();
 
 
 //$('.newAnimalButton').on('click', function () {
-$("animalButtons").on("click", function () {
-    //Add in the Search Term
-    var newURL = queryURLBase + queryAnimal + queryURLEnd;
-    //console.log(newURL);
+//$("animalButtons").on("click", function () {
+//Add in the Search Term
 
-    //Send AJAX call for new URL
-    runQuery(newURL);
+
+var newURL = queryURLBase + queryAnimal + queryURLEnd;
+
+
+//console.log(newURL);
+
+//Send AJAX call for new URL
+// runQuery(newURL);
+
+
+
+$('#buttons-view').on('click', '.animalClass', function () {
+    // Giphy code request here...
+    // var animalImage = $(this).attr("data-name");
+    var newURL = queryURLBase + queryAnimal + queryURLEnd;
 
     $.ajax({
-        url: newURL, method: "GET"
+        url: newURL,
+        method: "GET"
     })
+
         .then(function (response) {
             console.log(response);
             console.log(newURL);
 
-            $("buttons").on("click", function () {
-                var animalImage = $(this).attr("data-animal");
+            var results = response.data;
 
+            for (var i = 0; i < results.length; i++) {
+                var animalGifDiv = $("<div>");
 
-                $.ajax({
-                    url: newURL,
-                    method: "GET"
-                })
+                var p = $('<p>');
 
-                    .then(function (response) {
-                        console.log(response);
-                        console.log(queryURL);
+                p.text('Rating: ' + results[i].rating);
 
-                        var results = response.data;
+                var animalImage = $('<img>');
 
-                        for (var i = 0; i < results.length; i++) {
-                            var animalGifDiv = $("<div>");
+                // var animalImage = $(this).attr("data-name");
 
-                            var p = $('<p>');
+                animalImage.attr("src", results[i].images.fixed_height.url, 'data-name');
 
-                            p.text('Results: ' + results[i].rating);
+                animalGifDiv.prepend(p);
 
-                            var animalImage = $('<img>');
+                animalGifDiv.prepend(animalImage);
 
-                            animalImage.attr("src", results[i].images.fixed_height.url);
-
-                            animalGifDiv.prepend(p);
-
-                            animalGifDiv.prepend(animalImage);
-
-                            $("#gifs-appear-here").prepend(animalGifDiv);
-                        }
-                    });
-            });
-            //populateGifs(newURL);
-
-
-
-
-            //after each submit we want to add a new button and then have that  button be able to make a new gif
-            //until it reaches a limit(might have to use the limit in for loop)
-
-
-            //take the input (queryAnimal) and have it create a new button that runs a function that 
-            //outputs 10 gifs
+                $("#gifs-appear-here").prepend(animalGifDiv);
+            }
 
         });
 });
+
+
+
+
+
 

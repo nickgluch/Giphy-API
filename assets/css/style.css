@@ -13,3 +13,34 @@
 
 }
 
+img {
+        float:left;
+        margin:10px;
+        height: 200px;
+        margin-top: 50px;
+}
+
+p {
+         float:left;
+        margin:15px;
+        margin-left:-120px;
+}
+
+#gifs-appear-here {
+        height:800px;
+        width:800px;
+}
+
+.animalClass {
+  background-color: rgb(102, 152, 168);
+  color: white;
+  padding: 7px 16px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 14px;
+  border: 2px solid lightgrey;
+  margin:4px; 
+
+
+}
