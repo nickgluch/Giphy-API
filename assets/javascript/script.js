@@ -14,84 +14,156 @@
 
 var queryAnimal = "";
 
+var animalButtons = [];
+
 var queryURLBase = 'https://api.giphy.com/v1/gifs/search?api_key=6uOsr6lTuwmI5xXUcoRSKaBEHeClo6Ts&q='
 var queryURLEnd = '&limit=10&offset=0&rating=PG&lang=en'
 
 
 // FUNCTIONS
 //=============================================
-//AJAX Call for the query
-function runQuery(queryURL) {
-    $.ajax({ url: queryURL, method: "GET" })
+
+
+/* AJAX Call for the query
+function runQuery(newURL) {
+    $.ajax({ url: newURL, method: "GET" })
         .done(function (giphyData) {
             console.log(giphyData);
         })
 }
+*/
+
+
+
 
 // MAIN PROCESSES (METHODS, (FUNCTION CALLS))
 //=============================================
-//On Submit takes the user input value, trims it, and assigns it to a variable we can use
-$('#submit-button').on('click', function () {
-
-    queryAnimal = $('#animalForm').val().trim();
-    console.log(queryAnimal);
-
-    //Add in the Search Term
-    var newURL = queryURLBase + queryAnimal + queryURLEnd;
-    console.log(newURL);
-
-    //Send AJAX call for new URL
-    runQuery(newURL);
-
-    return false;
-
-    var newButton = $('<button/>'), {
-        text: queryAnimal,
-        click: function () {
-            //make new gif 
-        }
-});
 
 
-})
+//function for rendering new buttons on each animal search query
 
-//after each submit we want to add a new button and then have that  button be able to make a new gif
-//until it reaches a limit(might have to use the limit in for loop)
+function renderButtons() {
 
-$("button").on("click", function () {
-    var animal = $(this).attr("data-animal");
-    var queryURL = "https://api.giphy.com/v1/gifs/search?q=" +
-        + "&api_key=BkaUZZWcFij6J7AoQj3WtPb1R2p9O6V9&limit=10";
+    $("#buttons-view").empty();
 
-    function () {
-        for (var i = 0; i < results.length; i++) {
+    // Looping through the array of animal buttons
+    for (var i = 0; i < animalButtons.length; i++) {
 
-            // Step 3: uncomment the for loop above and the closing curly bracket below.
-            // Make a div with jQuery and store it in a variable named animalDiv.
-            animalDiv = $('<div>');
-            // Make a paragraph tag with jQuery and store it in a variable named p.
-            var p = $('<p>');
-            // Set the inner text of the paragraph to the rating of the image in results[i].
-            p.text(results[i].rating);
-            // Make an image tag with jQuery and store it in a variable named animalImage.
-            var animalImage = $('<img>');
-            // Set the image's src to results[i]'s fixed_height.url.
-            animalImage.attr('src', results[i].images.fixed_height.url)
-            // Append the p variable to the animalDiv variable.
-            animalDiv.append(p);
-            // Append the animalImage variable to the animalDiv variable.
-            animalDiv.append(animalImage);
-            // Prepend the animalDiv variable to the element with an id of gifs-appear-here.
-            $('#gifs-appear-here').prepend(animalDiv);
 
-        }
+
+
+
+
+
+        // Then dynamicaly generating buttons for each animal in the array.
+        var newAnimalButton = $("<button>");
+        // Adding a class
+        newAnimalButton.addClass("animalClass");
+        // Adding a data-attribute with a value of the animal at index i
+        newAnimalButton.attr("data-name", animalButtons[i]);
+        // Providing the button's text with a value of the animal at index i
+        newAnimalButton.text(animalButtons[i]);
+        // Adding the button to the HTML
+        $("#buttons-view").append(newAnimalButton);
     }
 
 
 
 
-//take the input (queryAnimal) and have it create a new button that runs a function that 
-//outputs 10 gifs
 
 
+}
+
+$('#add-animal').on('click', function () {
+    event.preventDefault();
+
+    queryAnimal = $('#animalForm').val().trim();
+
+
+
+    /*
+    console.log(queryAnimal);
+
+    //Add in the Search Term
+    var newURL = queryURLBase + queryAnimal + queryURLEnd;
+    //console.log(newURL);
+
+    //Send AJAX call for new URL
+    runQuery(newURL);
+*/
+
+
+
+    animalButtons.push(queryAnimal);
+    renderButtons();
+
+});
+
+renderButtons();
+
+
+//$('.newAnimalButton').on('click', function () {
+$("animalButtons").on("click", function () {
+    //Add in the Search Term
+    var newURL = queryURLBase + queryAnimal + queryURLEnd;
+    //console.log(newURL);
+
+    //Send AJAX call for new URL
+    runQuery(newURL);
+
+    $.ajax({
+        url: newURL, method: "GET"
+    })
+        .then(function (response) {
+            console.log(response);
+            console.log(newURL);
+
+            $("buttons").on("click", function () {
+                var animalImage = $(this).attr("data-animal");
+
+
+                $.ajax({
+                    url: newURL,
+                    method: "GET"
+                })
+
+                    .then(function (response) {
+                        console.log(response);
+                        console.log(queryURL);
+
+                        var results = response.data;
+
+                        for (var i = 0; i < results.length; i++) {
+                            var animalGifDiv = $("<div>");
+
+                            var p = $('<p>');
+
+                            p.text('Results: ' + results[i].rating);
+
+                            var animalImage = $('<img>');
+
+                            animalImage.attr("src", results[i].images.fixed_height.url);
+
+                            animalGifDiv.prepend(p);
+
+                            animalGifDiv.prepend(animalImage);
+
+                            $("#gifs-appear-here").prepend(animalGifDiv);
+                        }
+                    });
+            });
+            //populateGifs(newURL);
+
+
+
+
+            //after each submit we want to add a new button and then have that  button be able to make a new gif
+            //until it reaches a limit(might have to use the limit in for loop)
+
+
+            //take the input (queryAnimal) and have it create a new button that runs a function that 
+            //outputs 10 gifs
+
+        });
+});
 
