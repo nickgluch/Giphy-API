@@ -44,3 +44,16 @@ p {
 
 
 }
+
+#add-animal {
+        background-color: rgb(102, 152, 168);
+  color: white;
+  padding: 7px 16px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 14px;
+  border: 2px solid lightgrey;
+  margin:4px; 
+  margin-left: 800px;
+}
