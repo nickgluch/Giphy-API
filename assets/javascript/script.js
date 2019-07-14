@@ -59,6 +59,8 @@ function renderButtons() {
         var newAnimalButton = $("<button>");
         // Adding a class
         newAnimalButton.addClass("animalClass");
+
+
         // Adding a data-attribute with a value of the animal at index i
         newAnimalButton.attr("data-name", animalButtons[i]);
         // Providing the button's text with a value of the animal at index i
@@ -122,8 +124,15 @@ var newURL = queryURLBase + queryAnimal + queryURLEnd;
 
 $('#buttons-view').on('click', '.animalClass', function () {
     // Giphy code request here...
-    // var animalImage = $(this).attr("data-name");
+    //var animalImage = $(this).attr("data-name");
+
+
+
+    // buttonQueryAnimal = $(animalButtons[i]).val().trim();
+
+    //var newURL = queryURLBase + newAnimalButton.attr + queryURLEnd;
     var newURL = queryURLBase + queryAnimal + queryURLEnd;
+
 
     $.ajax({
         url: newURL,
@@ -147,20 +156,50 @@ $('#buttons-view').on('click', '.animalClass', function () {
 
                 // var animalImage = $(this).attr("data-name");
 
-                animalImage.attr("src", results[i].images.fixed_height.url, 'data-name');
+                animalImage.attr("src", results[i].images.fixed_height.url);
+
+                animalImage.attr("src", $(this).attr("data-animate"));
+                animalImage.attr("data-state", "animate");
+
 
                 animalGifDiv.prepend(p);
 
                 animalGifDiv.prepend(animalImage);
 
                 $("#gifs-appear-here").prepend(animalGifDiv);
-            }
+
+
+
+                $('.gif').on('click', function () {
+
+                    // The attr jQuery method allows us to get or set the value of any attribute on our HTML element
+                    var state = $(this).attr("data-state");
+
+                    // If the clicked image's state is still, update its src attribute to what its data-animate value is.
+                    // Then, set the image's data-state to animate
+                    // Else set src to the data-still value
+                    if (state === "still") {
+                        $(this).attr("src", $(this).attr("data-animate"));
+                        $(this).attr("data-state", "animate");
+                    } else {
+
+                        $(this).attr("src", $(this).attr("data-still"));
+                        $(this).attr("data-state", "still");
+                        animalImage.attr("src", results[i].images.fixed_height_still.url);
+
+
+
+
+                    };
+                });
+
+
+            };
+
+
+
 
         });
+
 });
-
-
-
-
-
 
